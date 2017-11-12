@@ -1,0 +1,9 @@
+.guessLetter{
+    -fx-border-style: solid;
+    -fx-border-color: black;
+}
+
+.guessedCharacterBox{
+    -fx-border-style: solid;
+    -fx-border-color: black;
+}
