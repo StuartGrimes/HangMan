@@ -33,6 +33,7 @@ public class HangManView {
     private Label lettersGuessed = new Label();
     private Label guessLabel = new Label("Enter guess :");
     private TextField guess = new TextField();
+    private Label messageLabel = new Label("");
     private AppController controller;
     private GridPane center = new GridPane();
 
@@ -134,6 +135,11 @@ public class HangManView {
         guessLabel.setAlignment(Pos.BASELINE_LEFT);
         guess.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 
+        //deal with row 6 (message row)
+        messageLabel.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 18));
+        GridPane.setColumnSpan(messageLabel, GridPane.REMAINING);
+        messageLabel.setAlignment(Pos.CENTER);
+
         //add nodes to our gridpane
         center.add(livesLabel, 0, 0);
         center.add(lives, 1, 0);
@@ -143,6 +149,7 @@ public class HangManView {
         center.add(lettersGuessed, 1, 2);
         center.add(guessLabel, 0, 4);
         center.add(guess,1,4 );
+        center.add(messageLabel, 0, 6);
     }
 
     public String getButtonText() {
@@ -159,6 +166,11 @@ public class HangManView {
 
     void setWordToGuess(String wordToGuessForView){
         wordDis.setText(wordToGuessForView);
+    }
+
+
+    public void setMessageLabel(String messageLabel) {
+        this.messageLabel.setText(messageLabel);
     }
 
 }

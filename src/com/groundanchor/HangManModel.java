@@ -16,6 +16,7 @@ public class HangManModel {
     private TextField guessLetter = new TextField();
     private StringBuffer lettersGuessed = new StringBuffer();
     private Boolean gameInPlay = true;
+    private Boolean gameOutcome = false;
     private String wordDisplay = new String();
 
     HangManModel() {
@@ -64,27 +65,33 @@ public class HangManModel {
         return wordDisplay;
     }
 
+    public Boolean getGameOutcome() {
+        return gameOutcome;
+    }
+
     public void updateModel(String guess) {
         //ensure its capitalised
         String letterGuessed = guess.toUpperCase();
-        //reduce live by 1
-        livesLeft -= 1;
+
         //add guess to string buffer to show letters guessed
         lettersGuessed.append(letterGuessed);
         //decide if letter guessed is in our word
         List<Integer> indexList = guessMatches(letterGuessed);
         //check if we got some match...
         if (indexList.size() != 0){
+
             char[] wordChar = wordDisplay.toCharArray();
             //update our wordDisplay to show changes.
             for (int i : indexList){
                 wordChar[i] = letterGuessed.charAt(0);
             }
             wordDisplay = new String(wordChar);
-            System.out.println(wordDisplay);
         }else{
-            System.out.println("your guess was not there!");
+            //invalid guess so reduce lives by 1
+            livesLeft -= 1;
         }
+        //now check if game has completed
+        checkIfGameOver();
     }
 
     private List<Integer> guessMatches(String letterToCheck){
@@ -98,5 +105,15 @@ public class HangManModel {
             }
         }
         return indexesOfMatches;
+    }
+
+    private void checkIfGameOver(){
+        if (wordChoosen.equals(wordDisplay)){
+            gameOutcome = true;
+            gameInPlay = false;
+        }else if (livesLeft == 0){
+            gameOutcome = false;
+            gameInPlay = false;
+        }
     }
 }

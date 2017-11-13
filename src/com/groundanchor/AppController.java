@@ -39,29 +39,36 @@ public class AppController extends Application {
 
     //deal with a button click - process guess and update state
     void processGuess(String guess) {
-        String letter = guess;
-        //validate guess before sending it on to update model
-        if (!isValid(letter) || letter.length() > 1) {
-            //not a valid guess deal with it
-            // TODO: 13/11/2017
-            //System.out.println("Invalid guess.");
-        } else {
-            //we have a valid guess
-            //first check to see if user has any lives left
-            if (model.getLivesLeft() > 0) {
+        view.setMessageLabel("");
+        if (model.getGameInPlay()) {
+            String letter = guess;
+            //validate guess before sending it on to update model
+            if (!isValid(letter) || letter.length() > 1) {
+                //not a valid guess deal with it
+                view.setMessageLabel("Your guess must a single alpha character!");
+                //System.out.println("Invalid guess.");
+            } else {
+                //we have a valid guess
+                //first check to see if user has any lives left
                 model.updateModel(letter);
                 //get the updated word to display;
                 String wordDisplay = model.getWordDisplay();
                 //pass the updated word into the view
                 view.setWordToGuess(wordDisplay);
+
+                //check to see if game has been won
+                if (model.getGameOutcome()) {
+
+                } else {
+                    //they lost
+                }
                 //update view to display all
                 upDateGame();
-            }else{
-                // this is to ensure users can have no more input processed if no lives available.
+
             }
+        } else {
+            //game is not in play
         }
-
-
         //System.out.println(guess);
     }
 
