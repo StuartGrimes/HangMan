@@ -1,8 +1,6 @@
 package com.groundanchor;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 public class AppController extends Application {
@@ -11,19 +9,18 @@ public class AppController extends Application {
     private HangManView view = new HangManView();
     Stage window = new Stage();
 
-    public AppController(){
+    public AppController() {
         view.setController(this);
     }
-
-//    void setController() {
-//        view.setController(this);
-//    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         try {
             window = primaryStage;
             view.setButtonText("Start Game");
+            model.setWordDisplay();
+            String wordDisplay = model.getWordDisplay();
+            view.setWordToGuess(wordDisplay);
             view.getView(window);
         } catch (Exception e) {
             System.out.println("Heuston...we have a problem.");
@@ -33,20 +30,43 @@ public class AppController extends Application {
 
     void upDateGame() {
         Integer lives = model.getLivesLeft();
-        Label wordDisplay = model.getWordDisplay();
         String lettersGuessed = model.getLettersGuessed();
-        view.createCenter(lives, wordDisplay, lettersGuessed);
+        view.createCenter(lives, lettersGuessed);
         view.setButtonText("Process Guess");
         view.getView(window);
-        System.out.println("Thank Fuck!");
+        System.out.println("Update Game Complete");
     }
 
     //deal with a button click - process guess and update state
-    void processGuess(ActionEvent event) {
-    Object happened = event;
+    void processGuess(String guess) {
+        String letter = guess;
+        //validate guess before sending it on to update model
+        if (!isValid(letter) || letter.length() > 1) {
+            //not a valid guess deal with it
+            // TODO: 13/11/2017
+            //System.out.println("Invalid guess.");
+        } else {
+            //we have a valid guess
+            //first check to see if user has any lives left
+            if (model.getLivesLeft() > 0) {
+                model.updateModel(letter);
+                //get the updated word to display;
+                String wordDisplay = model.getWordDisplay();
+                //pass the updated word into the view
+                view.setWordToGuess(wordDisplay);
+                //update view to display all
+                upDateGame();
+            }else{
+                // this is to ensure users can have no more input processed if no lives available.
+            }
+        }
+
+
+        //System.out.println(guess);
     }
 
-
-
+    private boolean isValid(String guess) {
+        return guess.matches("[a-zA-Z]+");
+    }
 
 }
