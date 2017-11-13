@@ -49,22 +49,27 @@ public class AppController extends Application {
                 //System.out.println("Invalid guess.");
             } else {
                 //we have a valid guess
-                //first check to see if user has any lives left
-                model.updateModel(letter);
-                //get the updated word to display;
-                String wordDisplay = model.getWordDisplay();
-                //pass the updated word into the view
-                view.setWordToGuess(wordDisplay);
-
-                //check to see if game has been won
-                if (model.getGameOutcome()) {
-
+                //need to check if this letter has been guessed before
+                if (!model.getDuplicateGuess(letter)) {
+                    model.updateModel(letter);
+                    //get the updated word to display;
+                    String wordDisplay = model.getWordDisplay();
+                    //pass the updated word into the view
+                    view.setWordToGuess(wordDisplay);
+                    //check to see if game has been won
+                    if (model.getGameOutcome()) {
+                        //game over they won
+                        view.setMessageLabel("Hey you won!");
+                    } else if(model.getLivesLeft() == 0) {
+                        //they lost
+                        view.setMessageLabel("Hey you lost!");
+                    }
                 } else {
-                    //they lost
+                    //the letter guessed is already in the list
+                    view.setMessageLabel("You Guessed this letter before!");
                 }
                 //update view to display all
                 upDateGame();
-
             }
         } else {
             //game is not in play
